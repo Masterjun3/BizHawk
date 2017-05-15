@@ -23,6 +23,7 @@ using BizHawk.Client.EmuHawk.WinFormExtensions;
 using BizHawk.Client.EmuHawk.ToolExtensions;
 using BizHawk.Emulation.Cores.Computers.AppleII;
 using BizHawk.Client.ApiHawk;
+using BizHawk.Client.EmuHawk.tools.MovieEditor;
 
 namespace BizHawk.Client.EmuHawk
 {
@@ -1459,6 +1460,11 @@ namespace BizHawk.Client.EmuHawk
 		private void VirtualPadMenuItem_Click(object sender, EventArgs e)
 		{
 			GlobalWin.Tools.Load<VirtualpadTool>();
+		}
+
+		private void MovieEditorMenuItem_Click(object sender, EventArgs e)
+		{
+			GlobalWin.Tools.Load<MovieEditor>();
 		}
 
 		private void CheatsMenuItem_Click(object sender, EventArgs e)
