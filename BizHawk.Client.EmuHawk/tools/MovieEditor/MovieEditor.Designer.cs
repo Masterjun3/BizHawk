@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MovieEditor));
 			this.MovieEditorStrip = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.coolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -35,6 +36,7 @@
 			this.broToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.thingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.etcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.MovieEditorInputRoll = new BizHawk.Client.EmuHawk.InputRoll();
 			this.MovieEditorStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -91,14 +93,41 @@
 			this.etcToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
 			this.etcToolStripMenuItem.Text = "etc";
 			// 
+			// MovieEditorInputRoll
+			// 
+			this.MovieEditorInputRoll.AllowColumnReorder = false;
+			this.MovieEditorInputRoll.AllowColumnResize = false;
+			this.MovieEditorInputRoll.allowRightClickSelecton = false;
+			this.MovieEditorInputRoll.AlwaysScroll = false;
+			this.MovieEditorInputRoll.CellHeightPadding = 0;
+			this.MovieEditorInputRoll.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.MovieEditorInputRoll.HideWasLagFrames = false;
+			this.MovieEditorInputRoll.HorizontalOrientation = false;
+			this.MovieEditorInputRoll.LagFramesToHide = 0;
+			this.MovieEditorInputRoll.letKeysModifySelection = false;
+			this.MovieEditorInputRoll.Location = new System.Drawing.Point(0, 24);
+			this.MovieEditorInputRoll.MaxCharactersInHorizontal = 1;
+			this.MovieEditorInputRoll.MultiSelect = false;
+			this.MovieEditorInputRoll.Name = "MovieEditorInputRoll";
+			this.MovieEditorInputRoll.RowCount = 0;
+			this.MovieEditorInputRoll.ScrollSpeed = 1;
+			this.MovieEditorInputRoll.SeekingCutoffInterval = 0;
+			this.MovieEditorInputRoll.Size = new System.Drawing.Size(284, 238);
+			this.MovieEditorInputRoll.suspendHotkeys = false;
+			this.MovieEditorInputRoll.TabIndex = 2;
+			this.MovieEditorInputRoll.Text = "inputRoll1";
+			// 
 			// MovieEditor
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(284, 262);
+			this.Controls.Add(this.MovieEditorInputRoll);
 			this.Controls.Add(this.MovieEditorStrip);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MovieEditor";
-			this.Text = "MovieEditor";
+			this.Text = "Cool Movie Editor";
+			this.Load += new System.EventHandler(this.MovieEditor_Load);
 			this.MovieEditorStrip.ResumeLayout(false);
 			this.MovieEditorStrip.PerformLayout();
 			this.ResumeLayout(false);
@@ -114,5 +143,6 @@
 		private System.Windows.Forms.ToolStripMenuItem broToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem thingsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem etcToolStripMenuItem;
+		private InputRoll MovieEditorInputRoll;
 	}
 }

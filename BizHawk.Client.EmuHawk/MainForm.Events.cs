@@ -1358,6 +1358,7 @@ namespace BizHawk.Client.EmuHawk
 			CodeDataLoggerMenuItem.Enabled = GlobalWin.Tools.IsAvailable<CDL>();
 
 			TAStudioMenuItem.Enabled = GlobalWin.Tools.IsAvailable<TAStudio>();
+			MovieEditorMenuItem.Enabled = Global.MovieSession.Movie.IsActive;
 
 			CheatsMenuItem.Enabled = GlobalWin.Tools.IsAvailable<Cheats>();
 			HexEditorMenuItem.Enabled = GlobalWin.Tools.IsAvailable<HexEditor>();
