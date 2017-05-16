@@ -23,7 +23,7 @@ namespace BizHawk.Client.EmuHawk.tools.MovieEditor
 
 		public MovieEditor()
 		{
-            InitializeComponent();
+			InitializeComponent();
 
 			MovieEditorInputRoll.QueryItemText += MovieEditor_QueryItemText;
 			MovieEditorInputRoll.QueryItemBkColor += MovieEditor_QueryItemBkColor;
