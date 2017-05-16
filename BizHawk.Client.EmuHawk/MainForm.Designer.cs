@@ -215,6 +215,7 @@
             this.MacroToolMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.VirtualPadMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BasicBotMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MovieEditorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.CheatsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gameSharkConverterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -434,7 +435,6 @@
             this.ShowMenuContextMenuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.ShowMenuContextMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerMouseIdle = new System.Windows.Forms.Timer(this.components);
-            this.MovieEditorMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MainformMenu.SuspendLayout();
             this.MainStatusBar.SuspendLayout();
             this.MainFormContextMenu.SuspendLayout();
@@ -2059,6 +2059,14 @@
             this.BasicBotMenuItem.Size = new System.Drawing.Size(191, 22);
             this.BasicBotMenuItem.Text = "Basic Bot";
             this.BasicBotMenuItem.Click += new System.EventHandler(this.BasicBotMenuItem_Click);
+            // 
+            // MovieEditorMenuItem
+            // 
+            this.MovieEditorMenuItem.Image = global::BizHawk.Client.EmuHawk.Properties.Resources.MovieEditor;
+            this.MovieEditorMenuItem.Name = "MovieEditorMenuItem";
+            this.MovieEditorMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.MovieEditorMenuItem.Text = "Cool Movie Editor";
+            this.MovieEditorMenuItem.Click += new System.EventHandler(this.MovieEditorMenuItem_Click);
             // 
             // toolStripSeparator11
             // 
@@ -3843,13 +3851,6 @@
             this.timerMouseIdle.Enabled = true;
             this.timerMouseIdle.Interval = 2000;
             this.timerMouseIdle.Tick += new System.EventHandler(this.timerMouseIdle_Tick);
-            // 
-            // MovieEditorMenuItem
-            // 
-            this.MovieEditorMenuItem.Name = "MovieEditorMenuItem";
-            this.MovieEditorMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.MovieEditorMenuItem.Text = "Movie Editor";
-            this.MovieEditorMenuItem.Click += new System.EventHandler(this.MovieEditorMenuItem_Click);
             // 
             // MainForm
             // 
