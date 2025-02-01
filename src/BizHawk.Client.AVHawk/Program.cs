@@ -168,7 +168,7 @@ namespace BizHawk.Client.AVHawk
 			var coreComm = new CoreComm((_) => { }, (_, _) => { }, (_) => true, null, CoreComm.CorePreferencesFlags.None, null);
 			using (var sink = new DisabledSink()) // disable output for rom loading because it is a lot
 			{
-				romLoader.LoadRom(argConfig.Rom, coreComm, null, forcedCoreName: CoreNames.Bsnes115);
+				romLoader.LoadRom(argConfig.Rom, coreComm, null);
 			}
 			session.RunQueuedMovie(recordMode: false, romLoader.LoadedEmulator);
 
