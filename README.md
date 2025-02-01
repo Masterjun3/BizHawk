@@ -1,3 +1,19 @@
+# AVHawk
+
+AVHawk is a fork of [BizHawk](https://github.com/TASEmulators/BizHawk), meant to allow AV (audio-video) encoding on systems without graphical interface support. BizHawk itself can't run without a GUI.
+
+See [smw-glitches](https://github.com/Masterjun3/smw-glitches) as an example of using AVHawk for automatic encoding via GitHub Actions.
+
+The changes to original BizHawk code are mostly isolated inside a new project [BizHawk.Client.AVHawk](src/BizHawk.Client.AVHawk), so this code can be expected to be easily rebased onto any new BizHawk versions.
+
+![image](https://github.com/user-attachments/assets/a42e76bd-2f63-442d-b634-f6f3a1c7dc1e)
+
+---
+
+The original BizHawk README.md follows below.
+
+---
+
 # BizHawk
 
 An emulation project.
