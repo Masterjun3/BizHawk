@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFramework>net48</TargetFramework>
 	</PropertyGroup>
-	<Import Project="../MainSlnExecutable.props" />
+	<Import Project="../MainSlnCommon.props" />
 	<PropertyGroup>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ApplicationIcon>images/logo.ico</ApplicationIcon>
@@ -47,7 +47,7 @@
 		<Compile Update="ArchiveChooser.cs" SubType="Form" />
 		<Compile Update="ArchiveChooser.Designer.cs" DependentUpon="ArchiveChooser.cs" />
 		<EmbeddedResource Update="ArchiveChooser.resx" DependentUpon="ArchiveChooser.cs" SubType="Designer" />
-		<Compile Update="AVOut/FFmpegWriterForm.cs" SubType="Form" />
+		<Compile Update="AVOut/FFmpegWriterForm.cs" />
 		<Compile Update="AVOut/FFmpegWriterForm.Designer.cs" DependentUpon="FFmpegWriterForm.cs" />
 		<EmbeddedResource Update="AVOut/FFmpegWriterForm.resx" DependentUpon="FFmpegWriterForm.cs" />
 		<Compile Update="AVOut/FFmpegDownloaderForm.cs" SubType="Form" />
@@ -250,7 +250,7 @@
 		<Compile Update="CustomControls/FolderBrowserDialogEx.cs" SubType="Component" />
 		<Compile Update="CustomControls/HexTextBox.cs" SubType="Component" />
 		<Compile Update="CustomControls/InputRoll/InputRoll.cs" SubType="Component" />
-		<Compile Update="CustomControls/InputRoll/InputRoll.Drawing.cs" DependentUpon="InputRoll.cs" SubType="Component" />
+		<Compile Update="CustomControls/InputRoll/InputRoll.Drawing.cs" DependentUpon="InputRoll.cs" />
 		<Compile Update="CustomControls/InputWidget.cs" SubType="Component" />
 		<Compile Update="CustomControls/MenuButton.cs" SubType="Component" />
 		<Compile Update="CustomControls/MiscControls.cs" SubType="Component" />
@@ -389,7 +389,7 @@
 		<Compile Update="tools/Lua/LuaWinform.cs" SubType="Form" />
 		<Compile Update="tools/Lua/LuaWinform.Designer.cs" DependentUpon="LuaWinform.cs" />
 		<EmbeddedResource Update="tools/Lua/LuaWinform.resx" DependentUpon="LuaWinform.cs" />
-		<Compile Update="tools/Macros/MacroInput.ButtonSelect.cs" SubType="Form" />
+		<Compile Update="tools/Macros/MacroInput.ButtonSelect.cs" />
 		<Compile Update="tools/Macros/MacroInput.cs" SubType="Form" />
 		<Compile Update="tools/Macros/MacroInput.Designer.cs" DependentUpon="MacroInput.cs" />
 		<EmbeddedResource Update="tools/Macros/MacroInput.resx" DependentUpon="MacroInput.cs" />
@@ -459,8 +459,8 @@
 		<Compile Update="tools/TAStudio/TAStudio.Designer.cs" DependentUpon="TAStudio.cs" />
 		<Compile Update="tools/TAStudio/TAStudio.IControlMainForm.cs" DependentUpon="TAStudio.cs" SubType="Form" />
 		<Compile Update="tools/TAStudio/TAStudio.IToolForm.cs" DependentUpon="TAStudio.cs" SubType="Form" />
-		<Compile Update="tools/TAStudio/TAStudio.ListView.cs" DependentUpon="TAStudio.cs" SubType="Form" />
-		<Compile Update="tools/TAStudio/TAStudio.MenuItems.cs" DependentUpon="TAStudio.cs" SubType="Form" />
+		<Compile Update="tools/TAStudio/TAStudio.ListView.cs" DependentUpon="TAStudio.cs" />
+		<Compile Update="tools/TAStudio/TAStudio.MenuItems.cs" DependentUpon="TAStudio.cs" />
 		<Compile Update="tools/TAStudio/TAStudio.Navigation.cs" DependentUpon="TAStudio.cs" SubType="Form" />
 		<EmbeddedResource Update="tools/TAStudio/TAStudio.resx" DependentUpon="TAStudio.cs" />
 		<Compile Update="tools/TAStudio/UndoHistoryForm.cs" SubType="Form" />

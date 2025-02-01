@@ -4,48 +4,44 @@ using BizHawk.Client.Common;
 
 namespace BizHawk.Client.EmuHawk
 {
+
 	/// <summary>
-	/// configures the FFmpegWriter
+	/// stores a single format preset
 	/// </summary>
-	public partial class FFmpegWriterForm : Form
+	public class FormatPreset : IDisposable
 	{
 		/// <summary>
-		/// stores a single format preset
+		/// Gets the name for the listbox
 		/// </summary>
-		public class FormatPreset : IDisposable
+		public string Name { get; }
+
+		/// <summary>
+		/// Gets the long human readable description
+		/// </summary>
+		public string Desc { get; }
+
+		/// <summary>
+		/// Gets the actual portion of the ffmpeg commandline
+		/// </summary>
+		public string Commandline { get; set; }
+
+		/// <summary>
+		/// Gets a value indicating whether or not it can be edited
+		/// </summary>
+		public bool Custom { get; }
+
+		/// <summary>
+		/// Gets the default file extension
+		/// </summary>
+		public string Extension { get; set; }
+
+		/// <summary>
+		/// get a list of canned presets
+		/// </summary>
+		public static FormatPreset[] GetPresets(string customCommand)
 		{
-			/// <summary>
-			/// Gets the name for the listbox
-			/// </summary>
-			public string Name { get; }
-
-			/// <summary>
-			/// Gets the long human readable description
-			/// </summary>
-			public string Desc { get; }
-
-			/// <summary>
-			/// Gets the actual portion of the ffmpeg commandline
-			/// </summary>
-			public string Commandline { get; set; }
-
-			/// <summary>
-			/// Gets a value indicating whether or not it can be edited
-			/// </summary>
-			public bool Custom { get; }
-
-			/// <summary>
-			/// Gets the default file extension
-			/// </summary>
-			public string Extension { get; set; }
-
-			/// <summary>
-			/// get a list of canned presets
-			/// </summary>
-			public static FormatPreset[] GetPresets(string customCommand)
+			return new[]
 			{
-				return new[]
-				{
 					new FormatPreset("AVI Lossless UT Video", "Lossless UT video and uncompressed audio in an AVI container. Compatible with AVISource(), if UT Video decoder is installed. Fast, but low compression.",
 						"-c:a pcm_s16le -c:v utvideo -pred median -pix_fmt gbrp -f avi", false, "avi"),
 					new FormatPreset("AVI Lossless FFV1", "Lossless FFV1 video and uncompressed audio in an AVI container. Compatible with AVISource(), if ffmpeg based decoder is installed. Slow, but high compression.",
@@ -73,69 +69,74 @@ namespace BizHawk.Client.EmuHawk
 					new FormatPreset("[Custom]", "Write your own ffmpeg command. For advanced users only.",
 						customCommand, true, "foobar")
 				};
-			}
+		}
 
-			/// <summary>
-			/// get the default format preset (from config files)
-			/// </summary>
-			public static FormatPreset GetDefaultPreset(Config config)
+		/// <summary>
+		/// get the default format preset (from config files)
+		/// </summary>
+		public static FormatPreset GetDefaultPreset(Config config)
+		{
+			FormatPreset[] fps = GetPresets(config.FFmpegCustomCommand);
+
+			foreach (var fp in fps)
 			{
-				FormatPreset[] fps = GetPresets(config.FFmpegCustomCommand);
-
-				foreach (var fp in fps)
+				if (fp.ToString() == config.FFmpegFormat)
 				{
-					if (fp.ToString() == config.FFmpegFormat)
+					if (fp.Custom)
 					{
-						if (fp.Custom)
-						{
-							return fp;
-						}
+						return fp;
 					}
 				}
-
-				// default to xvid?
-				return fps[1];
 			}
 
-			public override string ToString()
-			{
-				return Name;
-			}
+			// default to xvid?
+			return fps[1];
+		}
 
-			public void Dispose()
-			{
-			}
+		public override string ToString()
+		{
+			return Name;
+		}
 
-			public void DeduceFormat(string commandline)
+		public void Dispose()
+		{
+		}
+
+		public void DeduceFormat(string commandline)
+		{
+			var splitCommandLine = commandline.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+			for (int index = 0; index < splitCommandLine.Length - 1; index++)
 			{
-				var splitCommandLine = commandline.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-				for (int index = 0; index < splitCommandLine.Length - 1; index++)
+				if (splitCommandLine[index] == "-f")
 				{
-					if (splitCommandLine[index] == "-f")
-					{
-						Extension = splitCommandLine[index + 1];
-						break;
-					}
-				}
-
-				// are there other formats that don't match their file extensions?
-				if (Extension == "matroska")
-				{
-					Extension = "mkv";
+					Extension = splitCommandLine[index + 1];
+					break;
 				}
 			}
 
-			private FormatPreset(string name, string desc, string commandline, bool custom, string ext)
+			// are there other formats that don't match their file extensions?
+			if (Extension == "matroska")
 			{
-				Name = name;
-				Desc = desc;
-				Commandline = commandline;
-				Custom = custom;
-
-				DeduceFormat(Commandline);
+				Extension = "mkv";
 			}
 		}
 
+		private FormatPreset(string name, string desc, string commandline, bool custom, string ext)
+		{
+			Name = name;
+			Desc = desc;
+			Commandline = commandline;
+			Custom = custom;
+
+			DeduceFormat(Commandline);
+		}
+	}
+
+	/// <summary>
+	/// configures the FFmpegWriter
+	/// </summary>
+	public partial class FFmpegWriterForm : Form
+	{
 		private FFmpegWriterForm()
 		{
 			InitializeComponent();

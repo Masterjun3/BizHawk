@@ -56,7 +56,7 @@ namespace BizHawk.Client.EmuHawk
 		/// <summary>
 		/// codec token in use
 		/// </summary>
-		private FFmpegWriterForm.FormatPreset _token;
+		private FormatPreset _token;
 
 		/// <summary>
 		/// file extension actually used
@@ -221,7 +221,7 @@ namespace BizHawk.Client.EmuHawk
 		/// <exception cref="ArgumentException"><paramref name="token"/> does not inherit <see cref="FFmpegWriterForm.FormatPreset"/></exception>
 		public void SetVideoCodecToken(IDisposable token)
 		{
-			if (token is FFmpegWriterForm.FormatPreset preset)
+			if (token is FormatPreset preset)
 			{
 				_token = preset;
 			}
@@ -318,7 +318,7 @@ namespace BizHawk.Client.EmuHawk
 
 		public void SetDefaultVideoCodecToken(Config config)
 		{
-			_token = FFmpegWriterForm.FormatPreset.GetDefaultPreset(config);
+			_token = FormatPreset.GetDefaultPreset(config);
 		}
 
 		public bool UsesAudio => true;

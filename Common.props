@@ -12,7 +12,7 @@
 		<ContinuousIntegrationBuild Condition=" '$(GITLAB_CI)' != '' Or '$(APPVEYOR)' != '' ">true</ContinuousIntegrationBuild>
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
-		<DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+		<DefineConstants>$(DefineConstants);TRACE;BIZHAWKBUILD_GAMEDB_ALWAYS_MISS</DefineConstants>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<ErrorReport>prompt</ErrorReport>
 		<Features>strict</Features>
