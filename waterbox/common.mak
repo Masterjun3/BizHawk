@@ -16,7 +16,7 @@ ifdef NEED_LIBCO
 EMULIBC_OBJS := $(EMULIBC_OBJS) $(shell find $(WATERBOX_DIR)/libco/obj/release -type f -name '*.o')
 EMULIBC_DOBJS := $(EMULIBC_DOBJS) $(shell find $(WATERBOX_DIR)/libco/obj/debug -type f -name '*.o')
 endif
-LINKSCRIPT := $(WATERBOX_DIR)/linkscript.T
+LINKSCRIPT := $(WATERBOX_DIR)/linkscript_aarch64.T
 
 print-%: ;
 	@echo $* = $($*)
@@ -30,9 +30,9 @@ CC := $(SYSROOT)/bin/musl-gcc
 else
 $(error Compiler not found in sysroot)
 endif
-COMMONFLAGS := -fvisibility=hidden -I$(WATERBOX_DIR)/emulibc -Wall -mcmodel=large \
+COMMONFLAGS := -target aarch64-linux-gnu -fvisibility=hidden -I$(WATERBOX_DIR)/emulibc -Wall -mcmodel=large \
 	-mstack-protector-guard=global -fno-pic -fno-pie -fcf-protection=none \
-	-MD -MP
+	-MD -MP --gcc-toolchain=$(SYSROOT)
 CCFLAGS := $(COMMONFLAGS) $(CCFLAGS)
 LDFLAGS := $(LDFLAGS) -static -no-pie -Wl,--eh-frame-hdr,-O2 -T $(LINKSCRIPT) #-Wl,--plugin,$(LD_PLUGIN)
 CCFLAGS_DEBUG := -O0 -g
@@ -45,7 +45,7 @@ CXXFLAGS_DEBUG := -O0 -g
 CXXFLAGS_RELEASE := -O3 -flto -DNDEBUG
 CXXFLAGS_RELEASE_ASONLY := -O3
 
-EXTRA_LIBS := -L $(SYSROOT)/lib/linux -lclang_rt.builtins-x86_64 $(EXTRA_LIBS)
+EXTRA_LIBS := -L $(SYSROOT)/lib/linux -lclang_rt.builtins-aarch64 $(EXTRA_LIBS)
 CPP_EXTRA_LIBS := -lc++ -lc++abi -lunwind $(EXTRA_LIBS)
 
 ifneq ($(filter %.cpp,$(SRCS)),)

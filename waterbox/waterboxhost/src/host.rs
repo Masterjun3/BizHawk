@@ -239,7 +239,7 @@ fn arg_to_statbuff<'a>(arg: usize) -> &'a mut KStat {
 	unsafe { &mut *(arg as *mut KStat) }
 }
 
-extern "sysv64" fn syscall(
+extern "C" fn syscall(
 	a1: usize, a2: usize, a3: usize, a4: usize, a5: usize, _a6: usize,
 	nr: SyscallNumber, h: &mut WaterboxHost
 ) -> SyscallReturn {
@@ -422,8 +422,13 @@ extern "sysv64" fn syscall(
 		NR_SET_TID_ADDRESS => syscall_ok(h.threads.set_tid_address(a1) as usize),
 		NR_GETTID => syscall_ok(h.threads.get_tid() as usize),
 		NR_RT_SIGPROCMASK => {
+			if a1 == 0xFFFFFFFF {
+				// unix aarch64 libunwind calls this with an invalid argument (how: 0xFFFFFFFF) and expects an error return of EINVAL or EFAULT
+				syscall_err(EINVAL)
+			} else {
 			// we don't (nor ever plan to?) deliver any signals to guests, so...
 			syscall_ok(0)
+			}
 		},
 		NR_SCHED_YIELD => {
 			h.threads.yield_any(&mut h.context)

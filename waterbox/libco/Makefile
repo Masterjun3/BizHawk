@@ -1,6 +1,6 @@
 NO_WBX_TARGETS := 1
 CCFLAGS := -std=c99 -Wall
-SRCS := amd64.c #coswap.s
+SRCS := aarch64.c #coswap.s
 #AS := nasm
 #ASFLAGS := -f elf64 -Wall
 

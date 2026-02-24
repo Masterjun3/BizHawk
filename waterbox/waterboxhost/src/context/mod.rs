@@ -24,7 +24,10 @@ pub fn get_callback_ptr(slot: usize) -> usize{
 
 fn init_interop_area() -> AddressRange {
 	unsafe {
+		#[cfg(target_arch = "x86_64")]
 		let bytes = include_bytes!("interop.bin");
+		#[cfg(target_arch = "aarch64")]
+		let bytes = include_bytes!("interop_aarch64.bin");
 		let addr = pal::map_anon(
 			AddressRange { start: ORG, size: bytes.len() }.align_expand(),
 			Protection::RW).unwrap();
@@ -56,7 +59,7 @@ union FuncCast<T: Copy> {
 
 /// Enter waterbox code with a function that takes 0 arguments
 /// Returns the function's return value
-const CALL_GUEST_SIMPLE: FuncCast<extern "sysv64" fn(entry_point: usize, context: &mut Context) -> usize> = FuncCast { p: CALL_GUEST_SIMPLE_ADDR };
+const CALL_GUEST_SIMPLE: FuncCast<extern "C" fn(entry_point: usize, context: &mut Context) -> usize> = FuncCast { p: CALL_GUEST_SIMPLE_ADDR };
 /// Enter waterbox code with a function that takes 0 arguments
 /// Returns the function's return value
 pub fn call_guest_simple(entry_point: usize, context: &mut Context) -> usize{
@@ -64,10 +67,10 @@ pub fn call_guest_simple(entry_point: usize, context: &mut Context) -> usize{
 }
 
 /// Allowed type for callback functions that Waterbox cores can make back into the real world.
-pub type ExternalCallback = extern "sysv64" fn(
+pub type ExternalCallback = extern "C" fn(
 	a1: usize, a2: usize, a3: usize, a4: usize, a5: usize, a6: usize) -> usize;
 /// Allowed type of the syscall service function
-pub type SyscallCallback = extern "sysv64" fn(
+pub type SyscallCallback = extern "C" fn(
 	a1: usize, a2: usize, a3: usize, a4: usize, a5: usize, a6: usize, nr: SyscallNumber, h: &mut WaterboxHost) -> SyscallReturn;
 
 /// Structure used to track information for calls into waterbox code
@@ -121,7 +124,7 @@ pub fn prepare_thread() {
 	// We stomp over [gs:0x18] and use it for our own mini-TLS to track the stack marshalling
 	// On windows, that's a (normally unused and free for the plundering?) field in TIB
 	// On linux, that register is not normally in use, so we put some bytes there and then use it
-	#[cfg(unix)]
+	#[cfg(all(unix, target_arch = "x86_64"))]
 	unsafe {
 		use libc::*;
 		let mut gs = 0usize;
@@ -133,4 +136,26 @@ pub fn prepare_thread() {
 			});
 		}
 	}
+
+	#[cfg(all(unix, target_arch = "aarch64"))]
+	unsafe {
+		use core::arch::asm;
+		let mut tpidr: usize;
+		asm!(
+			"mrs {0}, tpidr_el0",
+			out(reg) tpidr,
+			options(nomem, nostack, preserves_flags)
+		);
+		if tpidr == 0 {
+			TIB.with(|b| {
+				let ptr = b.as_ref() as *const usize as usize;
+				asm!(
+					"msr tpidr_el0, {0}",
+					in(reg) ptr,
+					options(nomem, nostack, preserves_flags)
+				);
+			});
+		}
+	}
+
 }

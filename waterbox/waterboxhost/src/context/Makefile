@@ -1,2 +1,2 @@
-interop.bin: interop.s
-	nasm -f bin -Wall -o $@ $<
+interop_aarch64.bin: interop_aarch64.s
+	aarch64-linux-gnu-as -o temp.o $< && aarch64-linux-gnu-ld -T interop_aarch64_link.ld -o temp.elf temp.o && aarch64-linux-gnu-objcopy -O binary temp.elf $@ && rm temp.o temp.elf

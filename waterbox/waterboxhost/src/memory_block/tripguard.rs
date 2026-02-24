@@ -113,7 +113,7 @@ mod trip_pal {
 	}
 }
 
-#[cfg(unix)]
+#[cfg(all(unix, target_arch = "x86_64"))]
 mod trip_pal {
 	use libc::*;
 	use super::*;
@@ -166,4 +166,67 @@ mod trip_pal {
 			assert!(sigaction(SIGSEGV, &sa, &mut **SA_OLD.as_mut().unwrap() as *mut sigaction) == 0, "sigaction failed");
 		}
 	}
+}
+
+#[cfg(all(unix, target_arch = "aarch64"))]
+mod trip_pal {
+    use libc::*;
+    use super::*;
+
+    type SaHandler = unsafe extern "C" fn(i32) -> ();
+    type SaSigaction = unsafe extern "C" fn(i32, *const siginfo_t, *const ucontext_t) -> ();
+    static mut SA_OLD: Option<Box<sigaction>> = None;
+
+    pub fn initialize() {
+        use std::mem::{transmute, zeroed};
+
+        unsafe extern "C" fn handler(
+            sig: i32,
+            info: *const siginfo_t,
+            ucontext: *const ucontext_t,
+        ) {
+            let fault_address = (*info).si_addr() as usize;
+
+			// TODO: I don't know if there is a way to detect reads or writes.
+            let rethrow = match trip(fault_address) {
+                TripResult::Handled => false,
+                TripResult::NotHandled => true,
+            };
+
+            if rethrow {
+                let sa_old = SA_OLD.as_ref().unwrap();
+                if sa_old.sa_flags & SA_SIGINFO != 0 {
+                    transmute::<usize, SaSigaction>(sa_old.sa_sigaction)(
+                        sig,
+                        info,
+                        ucontext,
+                    );
+                } else {
+                    transmute::<usize, SaHandler>(sa_old.sa_sigaction)(sig);
+                }
+            }
+        }
+
+        unsafe {
+            SA_OLD = Some(Box::new(zeroed()));
+
+            let mut sa = sigaction {
+                sa_mask: zeroed(),
+                sa_sigaction: transmute::<SaSigaction, usize>(handler),
+                sa_flags: SA_ONSTACK | SA_SIGINFO,
+                sa_restorer: None,
+            };
+
+            sigfillset(&mut sa.sa_mask);
+
+            assert!(
+                sigaction(
+                    SIGSEGV,
+                    &sa,
+                    &mut **SA_OLD.as_mut().unwrap() as *mut sigaction,
+                ) == 0,
+                "sigaction failed"
+            );
+        }
+    }
 }
